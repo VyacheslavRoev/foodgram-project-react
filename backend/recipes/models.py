@@ -178,4 +178,3 @@ class ShoppingCart(models.Model):
                 name='unique_shopping'
             )
         ]
-

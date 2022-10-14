@@ -133,4 +133,3 @@ class RecipeViewSet(viewsets.ModelViewSet):
             filename
         )
         return response
-

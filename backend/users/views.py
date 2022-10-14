@@ -69,4 +69,3 @@ class SubscribeListView(ListAPIView):
 
     def get_queryset(self):
         return User.objects.filter(following__user=self.request.user)
-
