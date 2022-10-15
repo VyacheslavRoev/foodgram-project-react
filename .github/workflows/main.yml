@@ -83,8 +83,8 @@ jobs:
           script: |
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_backend:latest
             sudo docker pull ${{ secrets.DOCKER_USERNAME }}/foodgram_frontend:latest
-            sudo docker compose stop
-            sudo docker compose rm web
+            sudo docker-compose stop
+            sudo docker-compose rm web
             touch .env
             echo SECRET_KEY=${{ secrets.SECRET_KEY }} >> .env 
             echo DB_ENGINE=${{ secrets.DB_ENGINE }} >> .env
@@ -93,7 +93,7 @@ jobs:
             echo POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }} >> .env
             echo DB_HOST=${{ secrets.DB_HOST }} >> .env
             echo DB_PORT=${{ secrets.DB_PORT }} >> .env
-            sudo docker compose up -d
-            sudo docker compose exec -T web python manage.py makemigrations
-            sudo docker compose exec -T web python manage.py migrate
-            sudo docker compose exec -T web python manage.py collectstatic --no-input
+            sudo docker-compose up -d
+            sudo docker-compose exec -T web python manage.py makemigrations
+            sudo docker-compose exec -T web python manage.py migrate
+            sudo docker-compose exec -T web python manage.py collectstatic --no-input
