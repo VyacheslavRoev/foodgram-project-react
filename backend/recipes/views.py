@@ -33,7 +33,7 @@ class IngredientViewset(viewsets.ModelViewSet):
     filter_backends = (filters.SearchFilter,)
     search_fields = ('^name',)
     permission_classes = (IsAuthenticatedOrReadOnly,)
-    http_method_names = ('get',)
+
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
