@@ -29,7 +29,7 @@ class TagViewSet(viewsets.ModelViewSet):
 class IngredientViewset(viewsets.ModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
-    pagination_class = PageNumberPagination
+    pagination_class = None
     filter_backends = (filters.SearchFilter,)
     search_fields = ('^name',)
     permission_classes = (IsAuthenticatedOrReadOnly,)
