@@ -31,7 +31,7 @@ class IngredientViewset(viewsets.ModelViewSet):
     serializer_class = IngredientSerializer
     pagination_class = PageNumberPagination
     filter_backends = (filters.SearchFilter,)
-    search_fields = ('^name')
+    search_fields = ('^name',)
     permission_classes = (IsAuthenticatedOrReadOnly,)
     http_method_names = ('get',)
 
