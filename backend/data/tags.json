@@ -1,21 +1,3 @@
-{
-"recipes_tag": [
-	{
-		"id" : 1,
-		"name" : "завтрак",
-		"color" : "#FF0000",
-		"slug" : "breakfast"
-	},
-	{
-		"id" : 2,
-		"name" : "обед",
-		"color" : "#008000",
-		"slug" : "lunch"
-	},
-	{
-		"id" : 3,
-		"name" : "ужин",
-		"color" : "#8B00FF",
-		"slug" : "dinner"
-	}
-]}
+[{"model": "recipes.tag", "pk": 1, "fields": {"name": "завтрак", "color": "#FF0000", "slug": "breakfast"}},
+{"model": "recipes.tag", "pk": 2, "fields": {"name": "обед", "color": "#008000", "slug": "lunch"}},
+{"model": "recipes.tag", "pk": 3, "fields": {"name" : "ужин", "color" : "#8B00FF", "slug" : "dinner"}}]
