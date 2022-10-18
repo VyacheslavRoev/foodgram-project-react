@@ -35,7 +35,6 @@ class IngredientViewset(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
 
-
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     pagination_class = PageNumberPagination
