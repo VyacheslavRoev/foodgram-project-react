@@ -38,7 +38,7 @@ class RecipeFilter(filters.FilterSet):
         fields = ('tags', 'author', 'is_favorited', 'is_in_shopping_cart')
 
 
-class IngredientFilter(filter.Filterset):
+class IngredientFilter(filters.Filterset):
     name = filters.CharFilter(field_name="name", lookup_expr='icontains')
 
     class Meta:
