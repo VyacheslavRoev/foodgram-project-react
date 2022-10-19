@@ -1,7 +1,8 @@
 from django.contrib import admin
-from users.models import User
+from users.models import Subscribtions, User
 
-from recipes.models import Ingredient, IngredientAmount, Recipe, Tag, TagRecipe
+from recipes.models import (Favorite, Ingredient, IngredientAmount, Recipe,
+                            ShoppingCart, Tag, TagRecipe)
 
 
 class IngredientAmountInLine(admin.TabularInline):
@@ -55,7 +56,31 @@ class RecipeAdmin(admin.ModelAdmin):
     count_of_favorites.short_description = 'Добавление в избранное'
 
 
+class FavoriteAdmin(admin.ModelAdmin):
+    list_display = ('user', 'recipe',)
+    list_filter = ('user', 'recipe',)
+    search_fields = ('user', 'recipe',)
+    empty_value_display = '-пусто-'
+
+
+class ShoppingCartAdmin(admin.ModelAdmin):
+    list_display = ('user', 'recipe',)
+    list_filter = ('user', 'recipe',)
+    search_fields = ('user', 'recipe',)
+    empty_value_display = '-пусто-'
+
+
+class SubscriptionsAdmin(admin.ModelAdmin):
+    list_display = ('user', 'recipe',)
+    list_filter = ('user', 'recipe',)
+    search_fields = ('user', 'recipe',)
+    empty_value_display = '-пусто-'
+
+
 admin.site.register(User, UsersAdmin)
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(Tag, TagAdmin)
 admin.site.register(Ingredient, IngredientAdmin)
+admin.site.register(Favorite, FavoriteAdmin)
+admin.site.register(ShoppingCart, ShoppingCartAdmin)
+admin.site.register(Subscribtions, SubscriptionsAdmin)

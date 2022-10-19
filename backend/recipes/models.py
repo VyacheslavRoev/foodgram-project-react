@@ -141,7 +141,7 @@ class Favorite(models.Model):
         Recipe,
         on_delete=models.CASCADE,
         related_name='favorites',
-        verbose_name='Рецепт'
+        verbose_name='Избранный рецепт'
     )
 
     class Meta:
