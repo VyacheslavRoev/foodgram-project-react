@@ -51,7 +51,7 @@ class RecipeAdmin(admin.ModelAdmin):
     readonly_fields = ('count_of_favorites',)
 
     def count_of_favorites(self, obj):
-        return obj.favorite_recipes.count()
+        return obj.favorites.count()
 
     count_of_favorites.short_description = 'Добавление в избранное'
 
@@ -71,9 +71,9 @@ class ShoppingCartAdmin(admin.ModelAdmin):
 
 
 class SubscriptionsAdmin(admin.ModelAdmin):
-    list_display = ('user', 'recipe',)
-    list_filter = ('user', 'recipe',)
-    search_fields = ('user', 'recipe',)
+    list_display = ('user', 'author',)
+    list_filter = ('user', 'author',)
+    search_fields = ('user', 'author',)
     empty_value_display = '-пусто-'
 
 
