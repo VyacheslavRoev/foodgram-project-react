@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'backend',
     'recipes',
-    'api',
     'users',
 ]
 

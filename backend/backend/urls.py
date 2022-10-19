@@ -3,9 +3,14 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 
+api = [
+    path('', include('recipes.urls', namespace='recipes')),
+    path('', include('users.urls', namespace='users')),
+]
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/', include('api.urls')),
+    path('api/', include(api)),
 ]
 
 if settings.DEBUG:
