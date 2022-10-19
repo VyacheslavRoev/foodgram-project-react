@@ -11,7 +11,6 @@ from users.serializers import SubscriptionSerializer, UserSerializer
 
 
 class CustomUserViewset(UserViewSet):
-    """Вьюсет для работы с пользователями."""
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)

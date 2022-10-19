@@ -7,7 +7,6 @@ from recipes.models import (Favorite, Ingredient, IngredientAmount, Recipe,
 
 
 class TagSerializer(serializers.ModelSerializer):
-    """Сериализатор тэгов."""
 
     class Meta:
         model = Tag
@@ -15,7 +14,6 @@ class TagSerializer(serializers.ModelSerializer):
 
 
 class IngredientSerializer(serializers.ModelSerializer):
-    """Сериализатор ингредиентов."""
 
     class Meta:
         model = Ingredient
@@ -23,7 +21,6 @@ class IngredientSerializer(serializers.ModelSerializer):
 
 
 class IngredientAmountSerializer(serializers.ModelSerializer):
-    """Сериализатор количества ингредиентов."""
     id = serializers.CharField(
         read_only=True,
         source='ingredient.id'
