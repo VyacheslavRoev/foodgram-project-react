@@ -10,7 +10,8 @@ from rest_framework.response import Response
 from users.permissions import IsAuthorOrReadOnly
 from users.serializers import RecipeSubscriptionSerializer
 
-from recipes.models import Favorite, Ingredient, Recipe, ShoppingCart, Tag
+from recipes.models import (Favorite, Ingredient, IngredientAmount, Recipe,
+                            ShoppingCart, Tag)
 from recipes.serializers import (FavoriteSerializer, IngredientSerializer,
                                  RecipeReadSerializer, RecipeWriteSerializer,
                                  TagSerializer)
@@ -48,6 +49,9 @@ class RecipeViewSet(viewsets.ModelViewSet):
         if self.action in ('list', 'retreieve'):
             return RecipeReadSerializer
         return RecipeWriteSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(author=self.request.user)
 
     @action(
         detail=True,

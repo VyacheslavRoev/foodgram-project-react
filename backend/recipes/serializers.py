@@ -61,6 +61,11 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
     ingredients = IngredientAddSerializer(many=True)
     image = Base64ImageField()
 
+    def to_representation(self, instance):
+        request = self.context.get('request')
+        context = {'request': request}
+        return RecipeReadSerializer(instance, context=context).data
+
     def validate(self, data):
         ingredients = self.initial_data.get('ingredients')
         ingredients_list = []
@@ -75,11 +80,11 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
             ingredients_list.append(ingredient_id)
         return data
 
+    
     def create(self, validated_data):
-        author = self.context.get('request').user
         tags = validated_data.pop('tags')
         ingredients = validated_data.pop('ingredients')
-        recipe = Recipe.objects.create(author=author, **validated_data)
+        recipe = Recipe.objects.create(**validated_data)
         for ingredient in ingredients:
             IngredientAmount.objects.create(
                 recipe=recipe,
@@ -104,11 +109,6 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
         for tag in tags:
             instance.tags.add(tag)
         return super().update(instance, validated_data)
-
-    def to_representation(self, instance):
-        request = self.context.get('request')
-        context = {'request': request}
-        return RecipeReadSerializer(instance, context=context).data
 
     class Meta:
         model = Recipe
