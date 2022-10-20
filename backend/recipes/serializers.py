@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 from users.serializers import UserSerializer
@@ -64,47 +65,29 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
         ingredients = self.initial_data.get('ingredients')
         ingredients_list = []
         for ingredient in ingredients:
-            ingredient_id = ingredient['id']
+            ingredient_id = get_object_or_404(
+                Ingredient, id=ingredient['id']
+            )
             if ingredient_id in ingredients_list:
                 raise serializers.ValidationError(
                     'Ингредиенты не должны повторяться!'
                 )
             ingredients_list.append(ingredient_id)
-        tags = self.initial_data.get('tags')
-        if not tags:
-            raise serializers.ValidationError(
-                'Должен быть хотябы один тэг!'
-            )
-        tags_list = []
-        for tag in tags:
-            if tag in tags_list:
-                raise serializers.ValidationError(
-                    'Тэги должны быть уникальные!'
-                )
-            tags_list.append(tag)
         return data
-
-    @staticmethod
-    def create_ingredients(ingredients, recipe):
-        for ingredient in ingredients:
-            IngredientAmount.objects.create(
-                recipe=recipe,
-                ingredient=ingredient['id'],
-                amount=ingredient['amount']
-            )
-
-    @staticmethod
-    def create_tags(tags, recipe):
-        for tag in tags:
-            recipe.tags.add(tag)
 
     def create(self, validated_data):
         author = self.context.get('request').user
         tags = validated_data.pop('tags')
         ingredients = validated_data.pop('ingredients')
         recipe = Recipe.objects.create(author=author, **validated_data)
-        self.create_tags(tags, recipe)
-        self.create_ingredients(ingredients, recipe)
+        for ingredient in ingredients:
+            IngredientAmount.objects.create(
+                recipe=recipe,
+                ingredient=ingredient['id'],
+                amount=ingredient['amount']
+            )
+        for tag in tags:
+            recipe.tags.add(tag)
         return recipe
 
     def update(self, instance, validated_data):
@@ -112,8 +95,14 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
         instance.ingredients.clear()
         tags = validated_data.pop('tags')
         ingredients = validated_data.pop('ingredients')
-        self.create_tags(tags, instance)
-        self.create_ingredients(ingredients, instance)
+        for ingredient in ingredients:
+            IngredientAmount.objects.create(
+                recipe=instance,
+                ingredient=ingredient['id'],
+                amount=ingredient['amount']
+            )
+        for tag in tags:
+            instance.tags.add(tag)
         return super().update(instance, validated_data)
 
     def to_representation(self, instance):
