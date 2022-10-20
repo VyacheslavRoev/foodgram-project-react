@@ -70,7 +70,7 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
                     'Ингредиенты не должны повторяться!'
                 )
             ingredients_list.append(ingredient_id)
-        tags = data['tags']
+        tags = self.initial_data.get('tags')
         if not tags:
             raise serializers.ValidationError(
                 'Должен быть хотябы один тэг!'
