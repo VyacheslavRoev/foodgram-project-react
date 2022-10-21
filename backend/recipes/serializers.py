@@ -178,11 +178,6 @@ class FavoriteSerializer(serializers.ModelSerializer):
             )
         return data
 
-    # def create(self, validated_data):
-    #     favorite_recipe = Favorite.objects.create(**validated_data)
-    #     favorite_recipe.save()
-    #     return favorite_recipe
-
     class Meta:
         model = Favorite
         fields = ('id', 'name', 'image', 'cooking_time')
