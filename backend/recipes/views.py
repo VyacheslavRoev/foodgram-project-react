@@ -59,24 +59,19 @@ class RecipeViewSet(viewsets.ModelViewSet):
         permission_classes=[IsAuthenticatedOrReadOnly]
     )
     def favorite(self, request, pk):
-        recipe = get_object_or_404(Recipe, pk=pk)
-        user = request.user
+        serializer = FavoriteSerializer
         if request.method == 'POST':
-            favorite_recipe, created = Favorite.objects.get_or_create(
-                user=user, recipe=recipe
-            )
-            if created is True:
-                serializer = FavoriteSerializer()
-                return Response(
-                    serializer.to_representation(instance=favorite_recipe),
-                    status=status.HTTP_201_CREATED
-                )
+            data = {'user': request.user.id, 'recipe': pk}
+            serializer = serializer(data=data, context={'request': request})
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         if request.method == 'DELETE':
-            Favorite.objects.filter(
-                user=user, recipe=recipe
-            ).delete()
+            user = request.user
+            recipe = get_object_or_404(Recipe, pk=pk)
+            favorite_recipe = get_object_or_404(Recipe, user=user, recipe=recipe)
+            favorite_recipe.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
 
     @action(
         detail=True,
