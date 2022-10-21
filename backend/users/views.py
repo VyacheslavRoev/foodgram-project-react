@@ -23,19 +23,6 @@ class SubscribeView(APIView):
 
     def post(self, request, *args, **kwargs):
         user_id = self.kwargs.get('user_id')
-        if user_id == request.user.id:
-            return Response(
-                {'errors': 'Нельзя подписаться на самого себя'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        if Subscribtions.objects.filter(
-            user=request.user,
-            author_id=user_id
-        ).exists():
-            return Response(
-                {'errors': 'Вы уже подписаны на этого автора'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
         author = get_object_or_404(User, id=user_id)
         Subscribtions.objects.create(
             user=request.user,
@@ -55,10 +42,6 @@ class SubscribeView(APIView):
         if subscription:
             subscription.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
-        return Response(
-            {'errors': 'Вы не подписаны на этого автора'},
-            status=status.HTTP_400_BAD_REQUEST
-        )
 
 
 class SubscribeListView(ListAPIView):
