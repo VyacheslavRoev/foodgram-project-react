@@ -86,11 +86,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
         recipe = get_object_or_404(Recipe, pk=pk)
         user = request.user
         if request.method == 'POST':
-            if ShoppingCart.objects.filter(user=user, recipe=recipe).exists():
-                return Response(
-                    {'errors': 'Рецепт уже добавлен в список покупок!'},
-                    status=status.HTTP_400_BAD_REQUEST
-                )
             ShoppingCart.objects.get_or_create(user=user, recipe=recipe)
             serializer = RecipeSubscriptionSerializer(
                 recipe, context={'request': request}
@@ -101,7 +96,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 user=user, recipe=recipe
             ).delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
 
     @action(
         detail=False,

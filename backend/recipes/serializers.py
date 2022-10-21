@@ -178,10 +178,10 @@ class FavoriteSerializer(serializers.ModelSerializer):
             )
         return data
 
-    def create(self, validated_data):
-        favorite_recipe = Favorite.objects.create(**validated_data)
-        favorite_recipe.save()
-        return favorite_recipe
+    # def create(self, validated_data):
+    #     favorite_recipe = Favorite.objects.create(**validated_data)
+    #     favorite_recipe.save()
+    #     return favorite_recipe
 
     class Meta:
         model = Favorite
@@ -205,6 +205,17 @@ class ShoppingCartSerializer(serializers.ModelSerializer):
         read_only=True,
         source='recipe.cooking_time'
     )
+
+    def validate(self, data):
+        request = self.context.get('request')
+        recipe = data['recipe']
+        if not request or request.user.is_anonymous:
+            return False
+        if ShoppingCart.objects.filter(user=request.user, recipe=recipe).exists():
+            raise serializers.ValidationError(
+                'Рецепт уже добавлен в покупки!'
+            )
+        return data
 
     class Meta:
         model = ShoppingCart
