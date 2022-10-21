@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
-from users.serializers import RecipeSubscriptionSerializer, UserSerializer
+from users.serializers import UserSerializer
 
 from recipes.models import (Favorite, Ingredient, IngredientAmount, Recipe,
                             ShoppingCart, Tag)
@@ -178,11 +178,10 @@ class FavoriteSerializer(serializers.ModelSerializer):
             )
         return data
 
-    def to_representation(self, instance):
-        request = self.context.get('request')
-        context = {'request': request}
-        return RecipeSubscriptionSerializer(
-            instance.recipe, context=context).data
+    def create(self, validated_data):
+        favorite_recipe = Favorite.objects.create(**validated_data)
+        favorite_recipe.save()
+        return favorite_recipe
 
     class Meta:
         model = Favorite

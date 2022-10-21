@@ -10,8 +10,7 @@ from rest_framework.response import Response
 from users.permissions import IsAuthorOrReadOnly
 from users.serializers import RecipeSubscriptionSerializer
 
-from recipes.models import (Favorite, Ingredient, IngredientAmount, Recipe,
-                            ShoppingCart, Tag)
+from recipes.models import Favorite, Ingredient, Recipe, ShoppingCart, Tag
 from recipes.serializers import (FavoriteSerializer, IngredientSerializer,
                                  RecipeReadSerializer, RecipeWriteSerializer,
                                  TagSerializer)
@@ -61,22 +60,20 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def favorite(self, request, pk):
         recipe = get_object_or_404(Recipe, pk=pk)
         user = request.user
-        if request.method == 'POST':
-            favorite_recipe, created = Favorite.objects.get_or_create(
-                user=user, recipe=recipe
-            )
-            if created is True:
-                serializer = FavoriteSerializer()
-                return Response(
-                    serializer.to_representation(instance=favorite_recipe),
-                    status=status.HTTP_201_CREATED
-                )
         # if request.method == 'POST':
-        #     Favorite.objects.get_or_create(user=user, recipe=recipe)
-        #     serializer = FavoriteSerializer(
-        #         recipe, context={'request': request}
+        #     favorite_recipe, created = Favorite.objects.get_or_create(
+        #         user=user, recipe=recipe
         #     )
-        #     return Response(serializer.data, status=status.HTTP_201_CREATED)
+        #     if created is True:
+        #         serializer = FavoriteSerializer()
+        #         return Response(
+        #             serializer.to_representation(instance=favorite_recipe),
+        #             status=status.HTTP_201_CREATED
+        #         )
+        if request.method == 'POST':
+            Favorite.objects.get_or_create(user=user, recipe=recipe)
+            serializer = FavoriteSerializer()
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         if request.method == 'DELETE':
             Favorite.objects.filter(
                 user=user, recipe=recipe
