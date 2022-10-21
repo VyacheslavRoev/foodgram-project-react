@@ -76,7 +76,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 user=user, recipe=recipe
             ).delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
 
     @action(
         detail=True,
