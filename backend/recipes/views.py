@@ -1,6 +1,9 @@
-from django.http import HttpResponse
+import io
+
+from django.http import FileResponse, HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
+from reportlab.pdfgen import canvas
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import (IsAuthenticated,
@@ -120,9 +123,11 @@ class RecipeViewSet(viewsets.ModelViewSet):
              f' - {item["amount"]}\n'
              for item in shopping_list.values()]
         )
-        filename = "my-file.txt"
-        response = HttpResponse(content, content_type='text/plain')
-        response['Content-Disposition'] = 'attachment; filename={0}'.format(
-            filename
-        )
-        return response
+        buffer = io.BytesIO()
+        p  = canvas.Canvas (buffer)
+        p.drawString(100,100 , "Hello world.")
+        p.showPage()
+        p.save()
+        buffer.seek(0)
+        return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
+
