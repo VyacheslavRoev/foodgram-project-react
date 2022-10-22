@@ -148,21 +148,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         detail=False,
         permission_classes=(IsAuthenticated,)
         )
-    def download_shopping_cart(self, request):
-        def firstPageContent(page_canvas, document):
-            header_content = 'Список покупок'
-            headerHeight = defaultPageSize[1] - 50
-            headerWidth = defaultPageSize[0]/2.0
-
-            page_canvas.saveState()
-            page_canvas.setFont('Verdana', 18)
-            page_canvas.drawCentredString(
-                headerWidth,
-                headerHeight,
-                header_content
-            )
-            page_canvas.restoreState()
-        
+    def download_shopping_cart(self, request):       
         pdfmetrics.registerFont(
             TTFont('Verdana', os.path.join(settings.FONTS_ROOT, 'Verdana.ttf'))
         )
