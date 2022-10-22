@@ -129,7 +129,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
         # p.showPage()
         # p.save()
         # buffer.seek(0)
-        # return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
-        response = HttpResponse(content_type='application/pdf')
-        response['Content-Disposition'] = 'inline; filename="worksheet_pdf.pdf"'
+        
+        filename = "my-file.pdf"# return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
+        response = HttpResponse(content, content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename={0}'.format(filename) 
         return response
