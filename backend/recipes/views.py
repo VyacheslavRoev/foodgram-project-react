@@ -130,4 +130,3 @@ class RecipeViewSet(viewsets.ModelViewSet):
         p.save()
         buffer.seek(0)
         return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
-
