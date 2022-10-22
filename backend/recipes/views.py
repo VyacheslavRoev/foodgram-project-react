@@ -15,7 +15,7 @@ from recipes.serializers import (FavoriteSerializer, IngredientSerializer,
                                  TagSerializer)
 
 from .filters import IngredientFilter, RecipeFilter
-from .pagination import PageNumberPagination
+from .pagination import RecipePaginator
 
 
 class TagViewSet(viewsets.ModelViewSet):
@@ -35,7 +35,7 @@ class IngredientViewset(viewsets.ModelViewSet):
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
-    pagination_class = PageNumberPagination
+    pagination_class = RecipePaginator
     permission_classes = (IsAuthorOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
     filter_class = RecipeFilter
