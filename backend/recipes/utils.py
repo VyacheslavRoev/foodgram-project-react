@@ -12,6 +12,8 @@ from reportlab.pdfgen import canvas
 from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
 from reportlab.rl_config import defaultPageSize
 
+from .models import ShoppingCart
+
 
 def get_shopping(request):       
     pdfmetrics.registerFont(
