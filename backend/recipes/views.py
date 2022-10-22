@@ -125,7 +125,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         )
         buffer = io.BytesIO()
         p  = canvas.Canvas (buffer)
-        p.drawString(100,100 , "Hello world.")
+        p.drawString(100,100 , content)
         p.showPage()
         p.save()
         buffer.seek(0)
