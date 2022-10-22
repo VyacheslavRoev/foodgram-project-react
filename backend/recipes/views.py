@@ -194,12 +194,12 @@ class RecipeViewSet(viewsets.ModelViewSet):
             pagesize=pagesizes.portrait(pagesizes.A4),
         )
 
-        columns_width = [6*inch, 1*inch, 1*inch]
+        #columns_width = [6*inch, 1*inch, 1*inch]
         table = Table(
             content,
             rowHeights=20,
             repeatRows=1,
-            colWidths=columns_width,
+            #colWidths=columns_width,
             hAlign='CENTER'
         )
 
