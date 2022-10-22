@@ -129,8 +129,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
         )      
         buffer = io.BytesIO()
         p  = canvas.Canvas (buffer, pagesize=A4, bottomup=0)
-        pdfmetrics.registerFont(
-            TTFont('Helvetica', 'UTF-8'))
         textob  = p.beginText()
         textob.setTextOrigin(cm, cm)
         textob.setFont("Helvetica", 14)
