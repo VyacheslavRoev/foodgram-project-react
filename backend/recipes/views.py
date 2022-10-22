@@ -3,6 +3,8 @@ import io
 from django.http import FileResponse, HttpResponse
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.units import cm
 from reportlab.pdfgen import canvas
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -122,15 +124,22 @@ class RecipeViewSet(viewsets.ModelViewSet):
             [f'{item["name"]} ({item["measurement_unit"]}) '
              f' - {item["amount"]}\n'
              for item in shopping_list.values()]
-        )
-        # buffer = io.BytesIO()
-        # p  = canvas.Canvas (buffer)
+        )      
+        buffer = io.BytesIO()
+        p  = canvas.Canvas (buffer, pagesize=A4, bottomup=0)
+        textob  = p.beginText()
+        textob.setTextOrigin(cm, cm)
+        textob.setFont("Helvetica", 14)
+        for line in content:
+            textob.textLine(line)
+        p.drawText(textob)
+        p.showPage()
+        p.save()
+        buffer.seek(0)
+        return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
         # p.drawString(100,100 , content)
         # p.showPage()
         # p.save()
         # buffer.seek(0)
         
-        filename = "my-file.pdf"# return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
-        response = HttpResponse(content, content_type='application/pdf')
-        response['Content-Disposition'] = 'attachment; filename={0}'.format(filename) 
-        return response
+        
