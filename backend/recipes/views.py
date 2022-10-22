@@ -189,30 +189,16 @@ class RecipeViewSet(viewsets.ModelViewSet):
         )
 
         buffer = io.BytesIO()
-        document = SimpleDocTemplate(
-            buffer,
-            pagesize=pagesizes.portrait(pagesizes.A4),
-        )
-
-        #columns_width = [6*inch, 1*inch, 1*inch]
-        table = Table(
-            content,
-            rowHeights=20,
-            repeatRows=1,
-            #colWidths=columns_width,
-            hAlign='CENTER'
-        )
-
-        table.setStyle(TableStyle([
-            ('FONTSIZE', (0, 0), (-1, -1), 18),
-            ('FONTNAME', (0, 0), (-1, -1), "Verdana"),
-        ]))
-
-        document.build([table], onFirstPage=firstPageContent)
-
+        p  = canvas.Canvas (buffer, pagesize=A4, bottomup=0)
+        textob  = p.beginText()
+        textob.setTextOrigin(cm, cm)
+        textob.setFont('Verdana', 14)
+        for line in content:
+            textob.textLine(line)
+        p.drawText(textob)
+        p.showPage()
+        p.save()
         buffer.seek(0)
-        return FileResponse(
-            buffer, as_attachment=True, filename='shopping_cart.pdf',
-        )
+        return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
         
         
