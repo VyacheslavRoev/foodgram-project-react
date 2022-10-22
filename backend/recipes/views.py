@@ -129,7 +129,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         p  = canvas.Canvas (buffer, pagesize=A4, bottomup=0)
         textob  = p.beginText()
         textob.setTextOrigin(cm, cm)
-        textob.setFont("Helvetica", 14)
+        textob.setFont("Helvetica", 14, 'UTF-8')
         for line in content:
             textob.textLine(line)
         p.drawText(textob)
