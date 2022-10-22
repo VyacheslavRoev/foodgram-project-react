@@ -123,10 +123,13 @@ class RecipeViewSet(viewsets.ModelViewSet):
              f' - {item["amount"]}\n'
              for item in shopping_list.values()]
         )
-        buffer = io.BytesIO()
-        p  = canvas.Canvas (buffer)
-        p.drawString(100,100 , content)
-        p.showPage()
-        p.save()
-        buffer.seek(0)
-        return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
+        # buffer = io.BytesIO()
+        # p  = canvas.Canvas (buffer)
+        # p.drawString(100,100 , content)
+        # p.showPage()
+        # p.save()
+        # buffer.seek(0)
+        # return FileResponse(buffer, as_attachment=True, filename='hello.pdf')
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'inline; filename="worksheet_pdf.pdf"'
+        return response
