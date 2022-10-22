@@ -21,7 +21,6 @@ from .filters import IngredientFilter, RecipeFilter
 class TagViewSet(viewsets.ModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
-    pagination_class = None
     permission_classes = (IsAuthenticatedOrReadOnly,)
     http_method_names = ('get',)
 
@@ -29,7 +28,6 @@ class TagViewSet(viewsets.ModelViewSet):
 class IngredientViewset(viewsets.ModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
-    pagination_class = None
     filter_backends = (DjangoFilterBackend,)
     filterset_class = IngredientFilter
     permission_classes = (IsAuthenticatedOrReadOnly,)
