@@ -68,6 +68,12 @@ class RecipeViewSet(viewsets.ModelViewSet):
                     serializer.to_representation(instance=favorite_recipe),
                     status=status.HTTP_201_CREATED
                 )
+            if recipe.exists():
+                recipe.delete()
+            return Response(
+                {'msg': 'Успешно удалено'},
+                status=status.HTTP_204_NO_CONTENT
+            )
         if request.method == 'DELETE':
             Favorite.objects.filter(
                 user=user, recipe=recipe

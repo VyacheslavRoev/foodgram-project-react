@@ -54,40 +54,6 @@ class RecipeSubscriptionSerializer(serializers.ModelSerializer):
         fields = ('id', 'name', 'image', 'cooking_time')
 
 
-# class SubscriptionSerializer(serializers.ModelSerializer):
-#     recipes = RecipeSubscriptionSerializer(read_only=True, many=True)
-#     recipes_count = serializers.SerializerMethodField(read_only=True)
-#     is_subscribed = serializers.SerializerMethodField()
-
-#     def validate(self, data):
-#         author = data['following']
-#         user = data['follower']
-#         if user == author:
-#             raise serializers.ValidationError('Вы не можете подписаться на самого себя!')
-#         if Subscribtions.objects.filter(author=author, user=user).exists():
-#             raise serializers.ValidationError('Вы уже подписаны на этого автора!')
-#         return data
-
-#     def create(self, validated_data):
-#         subscribe = Subscribtions.objects.create(**validated_data)
-#         subscribe.save()
-#         return subscribe
-
-#     def get_is_subscribed(self, obj):
-#         user = self.context.get('request').user
-#         if user.is_anonymous:
-#             return False
-#         return Subscribtions.objects.filter(user=user, author=obj.id).exists()
-
-#     def get_recipes_count(self, obj):
-#         return obj.recipes.count()
-
-#     class Meta:
-#         model = User
-#         fields = ('email', 'id', 'username', 'first_name',
-#                   'last_name', 'is_subscribed', 'recipes', 'recipes_count')
-
-
 class SubscriptionSerializer(serializers.ModelSerializer):
     is_subscribed = serializers.SerializerMethodField()
     recipes = serializers.SerializerMethodField()
