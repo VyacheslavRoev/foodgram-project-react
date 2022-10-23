@@ -24,9 +24,9 @@ class SubscribeView(APIView):
     def post(self, request, *args, **kwargs):
         user_id = self.kwargs.get('user_id')
         author = get_object_or_404(User, id=user_id)
-        Subscribtions.objects.create(
+        Subscribtions.objects.get_or_create(
             user=request.user,
-            author_id=user_id
+            author=author
         )
         return Response(
             self.serializer_class(author, context={'request': request}).data,
@@ -35,9 +35,10 @@ class SubscribeView(APIView):
 
     def delete(self, request, *args, **kwargs):
         user_id = self.kwargs.get('user_id')
+        author = get_object_or_404(User, id=user_id)
         subscription = Subscribtions.objects.filter(
             user=request.user,
-            author_id=user_id
+            author=author
         )
         if subscription:
             subscription.delete()
