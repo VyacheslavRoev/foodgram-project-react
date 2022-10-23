@@ -142,8 +142,8 @@ class SubscriptionCreateSerializer(serializers.ModelSerializer):
         queryset=User.objects.all())
 
     def validate(self, data):
-        user = data['user']
-        author = data['author']
+        user = data['following']
+        author = data['follower']
         if self.context['request'].method == 'POST' and user == author:
             raise serializers.ValidationError(
                 'Нельзя подписаться на самого себя'
