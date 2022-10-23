@@ -9,8 +9,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from users.models import Subscribtions, User
-from users.serializers import (SubscriptionCreateSerializer,
-                               SubscriptionSerializer, UserSerializer)
+from users.serializers import SubscriptionSerializer, UserSerializer
 
 
 class CustomUserViewset(UserViewSet):
@@ -25,19 +24,16 @@ class SubscribeView(APIView):
     permission_classes = (IsAuthenticated,) 
 
     def post(self, request, *args, **kwargs): 
-        id = kwargs.get('pk')
-        user = self.request.user
-        author = get_object_or_404(User, id=id)
-        data = {'user': user.id, 'author': id}
-        serializer = SubscriptionCreateSerializer(
-            data=data, context={'request': request}
+        user_id = self.kwargs.get('user_id')
+        author = get_object_or_404(User, id=user_id) 
+        Subscribtions.objects.create( 
+            user=request.user, 
+            author_id=user_id 
+        ) 
+        return Response( 
+            self.serializer_class(author, context={'request': request}).data, 
+            status=status.HTTP_201_CREATED
         )
-        serializer.is_valid(raise_exception=True)
-        follow = Subscribtions.objects.create(user=user, author=author)
-        serializer = SubscriptionCreateSerializer(
-            follow, context={'request': request}
-        )
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def delete(self, request, *args, **kwargs):
         user_id = self.kwargs.get('user_id') 
