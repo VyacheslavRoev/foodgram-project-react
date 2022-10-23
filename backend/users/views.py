@@ -40,16 +40,14 @@ class SubscribeView(APIView):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def delete(self, request, *args, **kwargs):
-        id = kwargs.get('pk')
-        user = self.request.user
-        author = get_object_or_404(User, id=id)
-        follow = Subscribtions.objects.filter(user=user, author=author)
-        if follow.exists():
-            follow.delete()
-            return Response(
-                {'detail': 'Вы отписались от автора'},
-                status=status.HTTP_204_NO_CONTENT
-            )
+        user_id = self.kwargs.get('user_id') 
+        subscription = Subscribtions.objects.filter( 
+            user=request.user, 
+            author_id=user_id 
+        ) 
+        if subscription: 
+            subscription.delete() 
+            return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class SubscribeListView(ListAPIView):
