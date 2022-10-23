@@ -57,14 +57,14 @@ class SubscriptionSerializer(serializers.ModelSerializer):
     recipes_count = serializers.SerializerMethodField(read_only=True)
     is_subscribed = serializers.SerializerMethodField()
 
-    def validate(self, data):
-        author = data['following']
-        user = data['follower']
-        if user == author:
-            raise serializers.ValidationError('Вы не можете подписаться на самого себя!')
-        if Subscribtions.objects.filter(author=author, user=user).exists():
-            raise serializers.ValidationError('Вы уже подписаны на этого автора!')
-        return data
+    # def validate(self, data):
+    #     author = data['following']
+    #     user = data['follower']
+    #     if user == author:
+    #         raise serializers.ValidationError('Вы не можете подписаться на самого себя!')
+    #     if Subscribtions.objects.filter(author=author, user=user).exists():
+    #         raise serializers.ValidationError('Вы уже подписаны на этого автора!')
+    #     return data
 
     def create(self, validated_data):
         subscribe = Subscribtions.objects.create(**validated_data)
