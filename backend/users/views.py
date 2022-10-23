@@ -20,42 +20,52 @@ class CustomUserViewset(UserViewSet):
 
 class SubscribeView(APIView): 
     """Добавление и удаление подписки.""" 
+    serializer_class = SubscriptionCreateSerializer 
+    permission_classes = (IsAuthenticated,) 
+ 
+    def post(self, request, *args, **kwargs): 
+        user_id = self.kwargs.get('user_id') 
+        if user_id == request.user.id: 
+            return Response( 
+                {'errors': 'Нельзя подписаться на самого себя'}, 
+                status=status.HTTP_400_BAD_REQUEST 
+            ) 
+        if Subscribtions.objects.filter( 
+            user=request.user, 
+            author_id=user_id 
+        ).exists(): 
+            return Response( 
+                {'errors': 'Вы уже подписаны на этого автора'}, 
+                status=status.HTTP_400_BAD_REQUEST 
+            ) 
+        author = get_object_or_404(User, id=user_id) 
+        Subscribtions.objects.create( 
+            user=request.user, 
+            author_id=user_id 
+        ) 
+        return Response( 
+            self.serializer_class(author, context={'request': request}).data, 
+            status=status.HTTP_201_CREATED 
+        ) 
+    def delete(self, request, *args, **kwargs): 
+        user_id = self.kwargs.get('user_id') 
+        subscription = Subscribtions.objects.filter( 
+            user=request.user, 
+            author_id=user_id 
+        ) 
+        if subscription: 
+            subscription.delete() 
+            return Response(status=status.HTTP_204_NO_CONTENT) 
+        return Response( 
+            {'errors': 'Вы не подписаны на этого автора'}, 
+            status=status.HTTP_400_BAD_REQUEST 
+        ) 
+ 
+
+class SubscribeListView(ListAPIView): 
+    """Просмотр подписок.""" 
     serializer_class = SubscriptionSerializer 
     permission_classes = (IsAuthenticated,) 
 
-    def post(self, request, *args, **kwargs): 
-        id = kwargs.get('pk')
-        user = self.request.user
-        author = get_object_or_404(User, id=id)
-        data = {'user': user.id, 'author': id}
-        serializer = SubscriptionCreateSerializer(
-            data=data, context={'request': request}
-        )
-        serializer.is_valid(raise_exception=True)
-        follow = Subscribtions.objects.create(user=user, author=author)
-        serializer = SubscriptionCreateSerializer(
-            follow, context={'request': request}
-        )
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-    def delete(self, request, *args, **kwargs):
-        id = kwargs.get('pk')
-        user = self.request.user
-        author = get_object_or_404(User, id=id)
-        follow = Subscribtions.objects.filter(user=user, author=author)
-        if follow.exists():
-            follow.delete()
-            return Response(
-                {'detail': 'Вы отписались от автора'},
-                status=status.HTTP_204_NO_CONTENT
-            )
-
-
-class SubscribeListView(ListAPIView):
-    queryset = User.objects.all()
-    permission_classes = (IsAuthenticated,)
-    serializer_class = SubscriptionSerializer
-
-    def get_queryset(self):
-        user = self.request.user
-        return User.objects.filter(following__user=user)
+    def get_queryset(self): 
+        return User.objects.filter(following__user=self.request.user) 
