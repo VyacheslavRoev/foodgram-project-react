@@ -1,10 +1,10 @@
 from django.shortcuts import get_object_or_404
 from djoser.serializers import UserCreateSerializer as BaseSerializer
-from recipes.models import Recipe
 from rest_framework import serializers
 from rest_framework.fields import CurrentUserDefault
 from rest_framework.validators import UniqueTogetherValidator, UniqueValidator
 
+from recipes.models import Recipe
 from users.models import Subscribtions, User
 
 
@@ -48,7 +48,7 @@ class UserSerializer(serializers.ModelSerializer):
 
 
 class RecipeSubscriptionSerializer(serializers.ModelSerializer):
-    
+
     class Meta:
         model = Recipe
         fields = ('id', 'name', 'image', 'cooking_time')
@@ -60,7 +60,7 @@ class SubscriptionSerializer(serializers.ModelSerializer):
     recipes_count = serializers.SerializerMethodField(read_only=True)
 
     def get_recipes_count(self, obj):
-            return obj.recipes.count()
+        return obj.recipes.count()
 
     def get_is_subscribed(self, obj):
         if self.context['request'].user.is_anonymous:
@@ -102,7 +102,7 @@ class SubscriptionCreateSerializer(serializers.ModelSerializer):
         slug_field='id',
         queryset=User.objects.all(),
         default=CurrentUserDefault(),
-        ),
+    ),
     author = serializers.SlugRelatedField(
         slug_field='id',
         queryset=User.objects.all())

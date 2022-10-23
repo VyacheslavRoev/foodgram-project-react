@@ -1,13 +1,12 @@
 from djoser.views import UserViewSet
-from recipes.pagination import RecipePaginator
-from rest_framework import status, viewsets
-from rest_framework.decorators import action
+from rest_framework import status
 from rest_framework.generics import ListAPIView, get_object_or_404
 from rest_framework.permissions import (IsAuthenticated,
                                         IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from recipes.pagination import RecipePaginator
 from users.models import Subscribtions, User
 from users.serializers import SubscriptionSerializer, UserSerializer
 
@@ -18,31 +17,31 @@ class CustomUserViewset(UserViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
 
-class SubscribeView(APIView): 
-    """Добавление и удаление подписки.""" 
-    serializer_class = SubscriptionSerializer 
-    permission_classes = (IsAuthenticated,) 
+class SubscribeView(APIView):
+    """Добавление и удаление подписки."""
+    serializer_class = SubscriptionSerializer
+    permission_classes = (IsAuthenticated,)
 
-    def post(self, request, *args, **kwargs): 
+    def post(self, request, *args, **kwargs):
         user_id = self.kwargs.get('user_id')
-        author = get_object_or_404(User, id=user_id) 
-        Subscribtions.objects.create( 
-            user=request.user, 
-            author_id=user_id 
-        ) 
-        return Response( 
-            self.serializer_class(author, context={'request': request}).data, 
+        author = get_object_or_404(User, id=user_id)
+        Subscribtions.objects.create(
+            user=request.user,
+            author_id=user_id
+        )
+        return Response(
+            self.serializer_class(author, context={'request': request}).data,
             status=status.HTTP_201_CREATED
         )
 
     def delete(self, request, *args, **kwargs):
-        user_id = self.kwargs.get('user_id') 
-        subscription = Subscribtions.objects.filter( 
-            user=request.user, 
-            author_id=user_id 
-        ) 
-        if subscription: 
-            subscription.delete() 
+        user_id = self.kwargs.get('user_id')
+        subscription = Subscribtions.objects.filter(
+            user=request.user,
+            author_id=user_id
+        )
+        if subscription:
+            subscription.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
 
 

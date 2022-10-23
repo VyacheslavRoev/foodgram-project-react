@@ -1,8 +1,8 @@
 from django.shortcuts import get_object_or_404
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
-from users.serializers import UserSerializer
 
+from users.serializers import UserSerializer
 from recipes.models import (Favorite, Ingredient, IngredientAmount, Recipe,
                             ShoppingCart, Tag)
 
@@ -80,7 +80,6 @@ class RecipeWriteSerializer(serializers.ModelSerializer):
             ingredients_list.append(ingredient_id)
         return data
 
-    
     def create(self, validated_data):
         tags = validated_data.pop('tags')
         ingredients = validated_data.pop('ingredients')
@@ -209,7 +208,9 @@ class ShoppingCartSerializer(serializers.ModelSerializer):
         recipe = data['recipe']
         if not request or request.user.is_anonymous:
             return False
-        if ShoppingCart.objects.filter(user=request.user, recipe=recipe).exists():
+        if ShoppingCart.objects.filter(
+            user=request.user, recipe=recipe
+        ).exists():
             raise serializers.ValidationError(
                 'Рецепт уже добавлен в покупки!'
             )

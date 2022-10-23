@@ -2,20 +2,17 @@ import io
 import os
 
 from django.conf import settings
-from django.http import FileResponse, HttpResponse
-from reportlab.lib import pagesizes
+from django.http import FileResponse
 from reportlab.lib.pagesizes import A4
-from reportlab.lib.units import cm, inch
+from reportlab.lib.units import cm
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
-from reportlab.platypus import SimpleDocTemplate, Table, TableStyle
-from reportlab.rl_config import defaultPageSize
 
 from .models import ShoppingCart
 
 
-def get_shopping(request):       
+def get_shopping(request):
     pdfmetrics.registerFont(
         TTFont('Verdana', os.path.join(settings.FONTS_ROOT, 'Verdana.ttf'))
     )
@@ -41,8 +38,8 @@ def get_shopping(request):
     )
 
     buffer = io.BytesIO()
-    p  = canvas.Canvas (buffer, pagesize=A4, bottomup=0)
-    textob  = p.beginText()
+    p = canvas.Canvas(buffer, pagesize=A4, bottomup=0)
+    textob = p.beginText()
     textob.setTextOrigin(cm, cm)
     textob.setFont('Verdana', 14)
     for line in content:
@@ -51,4 +48,6 @@ def get_shopping(request):
     p.showPage()
     p.save()
     buffer.seek(0)
-    return FileResponse(buffer, as_attachment=True, filename='shopping_list.pdf')
+    return FileResponse(
+        buffer, as_attachment=True, filename='shopping_list.pdf'
+    )

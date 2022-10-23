@@ -1,13 +1,14 @@
 from django.shortcuts import get_object_or_404
 from django_filters.rest_framework import DjangoFilterBackend
-from rest_framework import status, viewsets
+from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import (IsAuthenticated,
                                         IsAuthenticatedOrReadOnly)
 from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
+
 from users.permissions import IsAuthorOrReadOnly
 from users.serializers import RecipeSubscriptionSerializer
-
 from recipes.models import Favorite, Ingredient, Recipe, ShoppingCart, Tag
 from recipes.serializers import (FavoriteSerializer, IngredientSerializer,
                                  RecipeReadSerializer, RecipeWriteSerializer,
@@ -18,14 +19,13 @@ from .pagination import RecipePaginator
 from .utils import get_shopping
 
 
-class TagViewSet(viewsets.ModelViewSet):
+class TagViewSet(ReadOnlyModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
-    http_method_names = ('get',)
 
 
-class IngredientViewset(viewsets.ModelViewSet):
+class IngredientViewset(ModelViewSet):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
     filter_backends = (DjangoFilterBackend,)
@@ -33,14 +33,12 @@ class IngredientViewset(viewsets.ModelViewSet):
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
 
-class RecipeViewSet(viewsets.ModelViewSet):
+class RecipeViewSet(ModelViewSet):
     queryset = Recipe.objects.all()
     pagination_class = RecipePaginator
     permission_classes = (IsAuthorOrReadOnly,)
     filter_backends = (DjangoFilterBackend,)
     filter_class = RecipeFilter
-
-    http_method_names = ('get', 'post', 'patch', 'delete')
 
     def get_serializer_class(self):
         if self.action in ('list', 'retreieve'):
@@ -59,13 +57,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
         recipe = get_object_or_404(Recipe, pk=pk)
         user = request.user
         if request.method == 'POST':
-            recipe = Favorite.objects.filter(user=user, recipe=recipe)
-            if recipe.exists():
-                recipe.delete()
-                return Response(
-                    {'msg': 'Успешно удалено'},
-                    status=status.HTTP_204_NO_CONTENT
-                )
             favorite_recipe, created = Favorite.objects.get_or_create(
                 user=user, recipe=recipe
             )
@@ -105,8 +96,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
         detail=False,
         methods=['GET'],
         permission_classes=(IsAuthenticated,)
-        )
-    def download_shopping_cart(self, request):       
+    )
+    def download_shopping_cart(self, request):
         return get_shopping(request)
-        
-        
