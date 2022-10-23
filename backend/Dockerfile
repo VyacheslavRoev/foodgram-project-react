@@ -4,6 +4,4 @@ COPY requirements.txt .
 RUN pip3 install -r /app/requirements.txt --no-cache-dir
 COPY . .
 RUN chmod u+x start.sh
-EXPOSE 8000
 CMD ["./start.sh"]
- 
