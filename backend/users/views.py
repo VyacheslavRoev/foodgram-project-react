@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 
 from recipes.pagination import RecipePaginator
 from users.models import Subscribtions, User
-from users.serializers import SubscriptionSerializer, UserSerializer
+from users.serializers import SubscriptionSerializer, UserSerializer, SubscriptionCreateSerializer
 
 
 class CustomUserViewset(UserViewSet):
@@ -19,7 +19,7 @@ class CustomUserViewset(UserViewSet):
 
 class SubscribeView(APIView):
     """Добавление и удаление подписки."""
-    serializer_class = SubscriptionSerializer
+    serializer_class = SubscriptionCreateSerializer
     permission_classes = (IsAuthenticated,)
 
     def post(self, request, *args, **kwargs):
