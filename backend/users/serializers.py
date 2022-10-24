@@ -2,7 +2,7 @@ from djoser.serializers import UserCreateSerializer as BaseSerializer
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 
-from subscriptions.models import Subscribtion
+from subscriptions.models import Subscription
 from .models import User
 
 
@@ -37,7 +37,7 @@ class UserSerializer(serializers.ModelSerializer):
         user = self.context.get('request').user
         if user.is_anonymous:
             return False
-        return Subscribtion.objects.filter(user=user, author=obj.id).exists()
+        return Subscription.objects.filter(user=user, author=obj.id).exists()
 
     class Meta:
         model = User

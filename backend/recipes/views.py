@@ -8,7 +8,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet, ReadOnlyModelViewSet
 
 from users.permissions import IsAuthorOrReadOnly
-from users.serializers import RecipeSubscriptionSerializer
+from subscriptions.serializers import RecipeSubscriptionSerializer
 from recipes.models import Favorite, Ingredient, Recipe, ShoppingCart, Tag
 from recipes.serializers import (FavoriteSerializer, IngredientSerializer,
                                  RecipeReadSerializer, RecipeWriteSerializer,
