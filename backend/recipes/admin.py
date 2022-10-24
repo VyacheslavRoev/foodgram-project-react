@@ -1,6 +1,7 @@
 from django.contrib import admin
-from users.models import Subscribtions, User
 
+from users.models import User
+from subscriptions.models import Subscription
 from recipes.models import (Favorite, Ingredient, IngredientAmount, Recipe,
                             ShoppingCart, Tag, TagRecipe)
 
@@ -83,4 +84,4 @@ admin.site.register(Tag, TagAdmin)
 admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(Favorite, FavoriteAdmin)
 admin.site.register(ShoppingCart, ShoppingCartAdmin)
-admin.site.register(Subscribtions, SubscriptionsAdmin)
+admin.site.register(Subscription, SubscriptionsAdmin)
