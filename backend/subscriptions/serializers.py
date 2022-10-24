@@ -6,7 +6,6 @@ from users.models import User
 from .models import Subscription
 
 
-
 class SubscriptionSerializer(serializers.ModelSerializer):
     is_subscribed = serializers.SerializerMethodField()
     recipes = serializers.SerializerMethodField()
