@@ -74,5 +74,5 @@ jobs:
             sudo docker-compose exec -T web python manage.py makemigrations subscriptions
             sudo docker-compose exec -T web python manage.py migrate --noinput
             sudo docker-compose exec -T web python manage.py collectstatic --no-input
-            sudo docker-compose exec -T web python manage.py loaddata data/ingredients1.json
-            sudo docker-compose exec -T web python manage.py loaddata data/tags.json
+            sudo docker-compose exec -T web python manage.py loaddata data/recipe_ingredients.json
+            sudo docker-compose exec -T web python manage.py loaddata data/recipe_tags.json
