@@ -30,6 +30,7 @@ INSTALLED_APPS = [
     'backend',
     'recipes',
     'users',
+    'subscriptions',
 ]
 
 MIDDLEWARE = [

@@ -7,8 +7,10 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from recipes.pagination import RecipePaginator
-from users.models import Subscribtions, User
-from users.serializers import SubscriptionSerializer, UserSerializer
+from subscriptions.models import Subscription
+from subscriptions.serializers import SubscriptionSerializer
+from .models import User
+from .serializers import UserSerializer
 
 
 class CustomUserViewset(UserViewSet):
@@ -25,7 +27,7 @@ class SubscribeView(APIView):
     def post(self, request, *args, **kwargs):
         user_id = self.kwargs.get('user_id')
         author = get_object_or_404(User, id=user_id)
-        Subscribtions.objects.create(
+        Subscription.objects.create(
             user=request.user,
             author_id=user_id
         )
@@ -36,7 +38,7 @@ class SubscribeView(APIView):
 
     def delete(self, request, *args, **kwargs):
         user_id = self.kwargs.get('user_id')
-        subscription = Subscribtions.objects.filter(
+        subscription = Subscription.objects.filter(
             user=request.user,
             author_id=user_id
         )
