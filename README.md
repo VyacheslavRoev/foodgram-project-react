@@ -44,11 +44,254 @@ get_random_secret_key()
 docker-compose up
 ```
 ____
-### Документация API доступна по адресу
+## Примеры запросов к API
+
+### Список пользователей
+```
+GET /api/users/
+```
+Ответ:
+```
+{
+  "count": 123,
+  "next": "http://foodgram.example.org/api/users/?page=4",
+  "previous": "http://foodgram.example.org/api/users/?page=2",
+  "results": [
+    {
+      "email": "user@example.com",
+      "id": 0,
+      "username": "string",
+      "first_name": "Вася",
+      "last_name": "Пупкин",
+      "is_subscribed": false
+    }
+  ]
+}
+```
+### Регистрация пользователя
+```
+POST /api/users/
+```
+```
+{
+  "email": "vpupkin@yandex.ru",
+  "username": "vasya.pupkin",
+  "first_name": "Вася",
+  "last_name": "Пупкин",
+  "password": "Qwerty123"
+}
+```
+Ответ:
+```
+{
+  "email": "vpupkin@yandex.ru",
+  "id": 0,
+  "username": "vasya.pupkin",
+  "first_name": "Вася",
+  "last_name": "Пупкин"
+}
+```
+### Получить токен авторизации
+Используется для авторизации по емейлу и паролю, чтобы далее использовать токен при запросах.
+```
+POST /api/auth/token/login/
+```
+```
+{
+  "password": "string",
+  "email": "string"
+}
+```
+Ответ:
+```
+{
+  "auth_token": "string"
+}
+```
+### Cписок тегов
+```
+GET api/tags/
+```
+Ответ:
+```
+[
+  {
+    "id": 0,
+    "name": "Завтрак",
+    "color": "#E26C2D",
+    "slug": "breakfast"
+  }
+]
+```
+### Создание рецепта
+Доступно только авторизованному пользователю
+```
+POST /api/recipes/
+```
+```
+{
+  "ingredients": [
+    {
+      "id": 1123,
+      "amount": 10
+    }
+  ],
+  "tags": [
+    1,
+    2
+  ],
+  "image": "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAgMAAABieywaAAAACVBMVEUAAAD///9fX1/S0ecCAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAACklEQVQImWNoAAAAggCByxOyYQAAAABJRU5ErkJggg==",
+  "name": "string",
+  "text": "string",
+  "cooking_time": 1
+}
+```
+Ответ:
+```
+{
+  "id": 0,
+  "tags": [
+    {
+      "id": 0,
+      "name": "Завтрак",
+      "color": "#E26C2D",
+      "slug": "breakfast"
+    }
+  ],
+  "author": {
+    "email": "user@example.com",
+    "id": 0,
+    "username": "string",
+    "first_name": "Вася",
+    "last_name": "Пупкин",
+    "is_subscribed": false
+  },
+  "ingredients": [
+    {
+      "id": 0,
+      "name": "Картофель отварной",
+      "measurement_unit": "г",
+      "amount": 1
+    }
+  ],
+  "is_favorited": true,
+  "is_in_shopping_cart": true,
+  "name": "string",
+  "image": "http://foodgram.example.org/media/recipes/images/image.jpeg",
+  "text": "string",
+  "cooking_time": 1
+}
+```
+### Добавить рецепт в список покупок
+Доступно только авторизованным пользователям
+```
+POST /api/recipes/{id}/shopping_cart/
+```
+Ответ:
+```
+{
+  "id": 0,
+  "name": "string",
+  "image": "http://foodgram.example.org/media/recipes/images/image.jpeg",
+  "cooking_time": 1
+}
+```
+### Добавить рецепт в избранное
+Доступно только авторизованному пользователю.
+```
+POST /api/recipes/{id}/favorite/
+```
+Ответ:
+```
+{
+  "id": 0,
+  "name": "string",
+  "image": "http://foodgram.example.org/media/recipes/images/image.jpeg",
+  "cooking_time": 1
+}
+```
+### Мои подписки
+Возвращает пользователей, на которых подписан текущий пользователь. В выдачу добавляются рецепты.
+```
+GET /api/users/subscriptions/
+```
+Ответ:
+```
+{
+  "count": 123,
+  "next": "http://foodgram.example.org/api/users/subscriptions/?page=4",
+  "previous": "http://foodgram.example.org/api/users/subscriptions/?page=2",
+  "results": [
+    {
+      "email": "user@example.com",
+      "id": 0,
+      "username": "string",
+      "first_name": "Вася",
+      "last_name": "Пупкин",
+      "is_subscribed": true,
+      "recipes": [
+        {
+          "id": 0,
+          "name": "string",
+          "image": "http://foodgram.example.org/media/recipes/images/image.jpeg",
+          "cooking_time": 1
+        }
+      ],
+      "recipes_count": 0
+    }
+  ]
+}
+```
+### Подписаться на пользователя
+Доступно только авторизованным пользователям
+```
+POST /api/users/{id}/subscribe/
+```
+Ответ:
+```
+{
+  "email": "user@example.com",
+  "id": 0,
+  "username": "string",
+  "first_name": "Вася",
+  "last_name": "Пупкин",
+  "is_subscribed": true,
+  "recipes": [
+    {
+      "id": 0,
+      "name": "string",
+      "image": "http://foodgram.example.org/media/recipes/images/image.jpeg",
+      "cooking_time": 1
+    }
+  ],
+  "recipes_count": 0
+}
+```
+### Список ингредиентов
+Список ингредиентов с возможностью поиска по имени.
+```
+GET /api/ingredients/
+```
+Ответ:
+```
+[
+  {
+    "id": 0,
+    "name": "Капуста",
+    "measurement_unit": "кг"
+  }
+]
+```
+### Полная окументация API доступна по адресу
 ```
 http://localhost/api/docs/
 ```
 ### Проект доступен по адресу
 ```
 http://foodgram-roev.ddns.net
+```
+```
+Администратор: admin
+E-mail: admin@admin.ru
+password: qwerty1234567890
 ```
