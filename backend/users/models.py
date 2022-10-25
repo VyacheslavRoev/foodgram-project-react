@@ -21,10 +21,10 @@ class User(AbstractUser):
         verbose_name='Фамилия',
         max_length=150
     )
-    is_staff = models.BooleanField(
-        verbose_name='Администратор',
-        default=False
-    )
+    # is_staff = models.BooleanField(
+    #     verbose_name='Администратор',
+    #     default=False
+    # )
     is_blocked = models.BooleanField(
         verbose_name='Заблокирован',
         default=False
