@@ -290,7 +290,9 @@ http://localhost/api/docs/
 ```
 http://foodgram-roev.ddns.net
 ```
+### Административная панель
 ```
+http://foodgram-roev.ddns.net/admin/
 Администратор: admin
 E-mail: admin@admin.ru
 password: qwerty1234567890
