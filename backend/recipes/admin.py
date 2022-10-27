@@ -16,10 +16,30 @@ class TagRecipeInLine(admin.TabularInline):
     extra = 1
 
 
+class FavoriteInline(admin.TabularInline):
+    model = Favorite
+    extra = 1
+
+
+class SubscriptionsInLine(admin.TabularInline):
+    model = Subscription
+    extra = 1
+
+
+class ShoppingInline(admin.TabularInline):
+    model = ShoppingCart
+    extra = 1
+
+
 class UsersAdmin(admin.ModelAdmin):
     list_display = ('username', 'password', 'first_name', 'last_name', 'email')
     list_filter = ('username', 'email')
     search_fields = ('username', 'email')
+    inlines = [
+        FavoriteInline,
+        SubscriptionsInLine,
+        ShoppingInline
+    ]
     empty_value_display = "-пусто-"
 
 

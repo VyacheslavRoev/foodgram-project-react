@@ -1,3 +1,4 @@
+from tabnanny import verbose
 from django.core.validators import MinValueValidator
 from django.db import models
 from users.models import User
@@ -106,7 +107,8 @@ class IngredientAmount(models.Model):
     ingredient = models.ForeignKey(
         Ingredient,
         on_delete=models.CASCADE,
-        related_name='ingredient_amount'
+        related_name='ingredient_amount',
+        verbose_name='Ингредиенты'
     )
     amount = models.PositiveSmallIntegerField(
         default=1,
@@ -116,13 +118,21 @@ class IngredientAmount(models.Model):
     )
 
     class Meta:
-        verbose_name = 'Количество ингредиента'
-        verbose_name_plural = 'Количество ингредиента'
+        verbose_name = 'Ингредиент в рецепте'
+        verbose_name_plural = 'Ингредиенты в рецепте'
 
 
 class TagRecipe(models.Model):
-    tag = models.ForeignKey(Tag, on_delete=models.CASCADE)
+    tag = models.ForeignKey(
+        Tag,
+        on_delete=models.CASCADE,
+        verbose_name='Тэги'
+    )
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name = 'Тэги в рецепте'
+        verbose_name_plural = 'Тэги в рецепте'
 
 
 class Favorite(models.Model):
