@@ -57,6 +57,11 @@ class RecipeViewSet(ModelViewSet):
         recipe = get_object_or_404(Recipe, pk=pk)
         user = request.user
         if request.method == 'POST':
+            if Favorite.objects.filter(user=user, recipe=recipe).exists():
+                Favorite.objects.filter(
+                user=user, recipe=recipe
+            ).delete()
+                return Response(status=status.HTTP_204_NO_CONTENT)
             favorite_recipe, created = Favorite.objects.get_or_create(
                 user=user, recipe=recipe
             )
@@ -66,10 +71,6 @@ class RecipeViewSet(ModelViewSet):
                     serializer.to_representation(instance=favorite_recipe),
                     status=status.HTTP_201_CREATED
                 )
-            if Favorite.objects.filter(user=user, recipe=recipe).exists():
-                Favorite.objects.filter(
-                user=user, recipe=recipe
-            ).delete()
         if request.method == 'DELETE':
             Favorite.objects.filter(
                 user=user, recipe=recipe
