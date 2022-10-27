@@ -23,6 +23,7 @@ class FavoriteInline(admin.TabularInline):
 
 class SubscriptionsInLine(admin.TabularInline):
     model = Subscription
+    fk_name = 'user'
     extra = 1
 
 
