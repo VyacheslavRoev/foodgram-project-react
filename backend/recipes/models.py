@@ -131,7 +131,7 @@ class TagRecipe(models.Model):
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
 
     class Meta:
-        verbose_name = 'Тэги в рецепте'
+        verbose_name = 'Тэг в рецепте'
         verbose_name_plural = 'Тэги в рецепте'
 
 
