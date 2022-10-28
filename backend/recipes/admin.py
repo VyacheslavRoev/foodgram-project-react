@@ -1,6 +1,6 @@
 from tabnanny import verbose
 from django.contrib import admin
-from rest_framework.authtoken.models import TokenProxy
+from rest_framework.authtoken.admin import TokenAdmin
 from users.models import User
 from subscriptions.models import Subscription
 from recipes.models import (Favorite, Ingredient, IngredientAmount, Recipe,
@@ -126,7 +126,7 @@ class SubscriptionsAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
 
 
-class TokenProxyAdmin(admin.ModelAdmin):
+class TokenProxyAdmin(TokenAdmin):
 
     class Meta:
         verbose_name='Токен'
