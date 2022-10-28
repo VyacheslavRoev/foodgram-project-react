@@ -124,6 +124,7 @@ class SubscriptionsAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
 
 
+
 admin.site.register(User, UsersAdmin)
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(Tag, TagAdmin)
