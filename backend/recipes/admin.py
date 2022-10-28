@@ -1,5 +1,5 @@
 from django.contrib import admin
-from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.admin import TokenAdmin
 from users.models import User
 from subscriptions.models import Subscription
 from recipes.models import (Favorite, Ingredient, IngredientAmount, Recipe,
@@ -125,7 +125,7 @@ class SubscriptionsAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
 
 
-class TokenAdmin(admin.ModelAdmin):
+class MyTokenAdmin(admin.ModelAdmin):
     class Meta:
         verbose_name = 'Токен'
         verbose_name_plural = 'Токены'
@@ -138,4 +138,3 @@ admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(Favorite, FavoriteAdmin)
 admin.site.register(ShoppingCart, ShoppingCartAdmin)
 admin.site.register(Subscription, SubscriptionsAdmin)
-admin.site.register(Token, TokenAdmin)
