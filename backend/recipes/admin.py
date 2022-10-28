@@ -1,6 +1,4 @@
-from tabnanny import verbose
 from django.contrib import admin
-from rest_framework.authtoken.admin import TokenAdmin
 from users.models import User
 from subscriptions.models import Subscription
 from recipes.models import (Favorite, Ingredient, IngredientAmount, Recipe,
@@ -124,13 +122,6 @@ class SubscriptionsAdmin(admin.ModelAdmin):
     list_filter = ('user', 'author',)
     search_fields = ('user', 'author',)
     empty_value_display = '-пусто-'
-
-
-class TokenProxyAdmin(TokenAdmin):
-
-    class Meta:
-        verbose_name='Токен'
-        verbose_name_plural='Токены'
 
 
 admin.site.register(User, UsersAdmin)
