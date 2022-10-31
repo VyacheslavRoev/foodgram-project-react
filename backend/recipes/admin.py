@@ -4,8 +4,7 @@ from django.contrib.admin.views.main import ChangeList
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.urls import reverse
-from rest_framework.authtoken.models import Token
-from users.models import User, MyTokenProxy
+from users.models import User, MyTokenProxy, MyToken
 from subscriptions.models import Subscription
 from recipes.models import (Favorite, Ingredient, IngredientAmount, Recipe,
                             ShoppingCart, Tag, TagRecipe)
@@ -162,7 +161,7 @@ class TokenAdmin(admin.ModelAdmin):
             return None
 
     def delete_model(self, request, obj):
-        token = Token.objects.get(key=obj.key)
+        token = MyToken.objects.get(key=obj.key)
         return super().delete_model(request, token)
 
 
