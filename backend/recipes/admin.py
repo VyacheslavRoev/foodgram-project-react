@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.conf import settings
 from rest_framework.authtoken.admin import TokenAdmin
 from rest_framework.authtoken.models import Token, TokenProxy
 from django.contrib.admin.utils import quote
@@ -143,17 +142,6 @@ class TokenChangeList(ChangeList):
                        current_app=self.model_admin.admin_site.name)
 
 
-class MyTokenProxy(Token):
-    @property
-    def pk(self):
-        return self.user_id
-
-    class Meta:
-        proxy = 'rest_framework.authtoken' in settings.INSTALLED_APPS
-        abstract = 'rest_framework.authtoken' not in settings.INSTALLED_APPS
-        verbose_name = "ТОкен"
-
-
 class TokenAdmin(admin.ModelAdmin):
     list_display = ('key', 'user', 'created')
     fields = ('user',)
@@ -186,4 +174,4 @@ admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(Favorite, FavoriteAdmin)
 admin.site.register(ShoppingCart, ShoppingCartAdmin)
 admin.site.register(Subscription, SubscriptionsAdmin)
-admin.site.register(MyTokenProxy, TokenAdmin)
+admin.site.register(Token, TokenAdmin)
