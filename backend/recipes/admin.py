@@ -1,6 +1,6 @@
 from django.contrib import admin
 from rest_framework.authtoken.admin import TokenAdmin
-from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.models import Token, TokenProxy
 from django.contrib.admin.utils import quote
 from django.contrib.admin.views.main import ChangeList
 from django.contrib.auth import get_user_model
@@ -166,6 +166,7 @@ class TokenAdmin(admin.ModelAdmin):
         return super().delete_model(request, token)
 
 
+admin.site.unregister(TokenProxy)
 admin.site.register(User, UsersAdmin)
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(Tag, TagAdmin)
