@@ -142,7 +142,7 @@ class TokenChangeList(ChangeList):
                        current_app=self.model_admin.admin_site.name)
 
 
-class TokenAdmin(admin.ModelAdmin):
+class TokenProxyAdmin(admin.ModelAdmin):
     list_display = ('key', 'user', 'created')
     fields = ('user',)
     ordering = ('-created',)
@@ -178,4 +178,4 @@ admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(Favorite, FavoriteAdmin)
 admin.site.register(ShoppingCart, ShoppingCartAdmin)
 admin.site.register(Subscription, SubscriptionsAdmin)
-admin.site.register(TokenProxy, TokenAdmin)
+admin.site.register(TokenProxy, TokenProxyAdmin)
