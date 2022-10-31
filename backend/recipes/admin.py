@@ -1,15 +1,11 @@
+from tabnanny import verbose
 from django.contrib import admin
-from django.contrib.admin.utils import quote
-from django.contrib.admin.views.main import ChangeList
-from django.contrib.auth import get_user_model
-from django.core.exceptions import ValidationError
-from django.urls import reverse
-from users.models import User, MyTokenProxy, MyToken
+from rest_framework.authtoken.admin import TokenAdmin
+from rest_framework.authtoken.models import Token
+from users.models import User
 from subscriptions.models import Subscription
 from recipes.models import (Favorite, Ingredient, IngredientAmount, Recipe,
                             ShoppingCart, Tag, TagRecipe)
-
-User = get_user_model()
 
 
 class IngredientAmountInLine(admin.TabularInline):
@@ -130,42 +126,14 @@ class SubscriptionsAdmin(admin.ModelAdmin):
     search_fields = ('user', 'author',)
     empty_value_display = '-пусто-'
 
+class TokenAdmin(admin.ModelAdmin):
 
-class TokenChangeList(ChangeList):
-    """Map to matching User id"""
-    def url_for_result(self, result):
-        pk = result.user.pk
-        return reverse('admin:%s_%s_change' % (self.opts.app_label,
-                                               self.opts.model_name),
-                       args=(quote(pk),),
-                       current_app=self.model_admin.admin_site.name)
+    class Meta:
+        verbose_name = 'Токен'
+        verbose_name_plural = 'Токены'
 
 
-class MyTokenAdmin(admin.ModelAdmin):
-    list_display = ('key', 'user', 'created')
-    fields = ('user',)
-    ordering = ('-created',)
-    actions = None
 
-    def get_changelist(self, request, **kwargs):
-        return TokenChangeList
-
-    def get_object(self, request, object_id, from_field=None):
-        queryset = self.get_queryset(request)
-        field = User._meta.pk
-        try:
-            object_id = field.to_python(object_id)
-            user = User.objects.get(**{field.name: object_id})
-            return queryset.get(user=user)
-        except (queryset.model.DoesNotExist, User.DoesNotExist, ValidationError, ValueError):
-            return None
-
-    def delete_model(self, request, obj):
-        token = MyToken.objects.get(key=obj.key)
-        return super().delete_model(request, token)
-
-
-admin.site.register(MyTokenProxy, MyTokenAdmin)
 admin.site.register(User, UsersAdmin)
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(Tag, TagAdmin)
@@ -173,3 +141,4 @@ admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(Favorite, FavoriteAdmin)
 admin.site.register(ShoppingCart, ShoppingCartAdmin)
 admin.site.register(Subscription, SubscriptionsAdmin)
+admin.site.register(Token, TokenAdmin)

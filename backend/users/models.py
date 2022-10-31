@@ -1,5 +1,4 @@
 from django.contrib.auth.models import AbstractUser
-from rest_framework.authtoken.models import TokenProxy, Token
 from django.db import models
 
 
@@ -41,17 +40,3 @@ class User(AbstractUser):
 
     def __str__(self):
         return self.username
-
-
-class MyToken(Token):
-    
-    class Meta:
-        verbose_name = 'Токен'
-        verbose_name_plural = 'Токены'
-
-
-class MyTokenProxy(TokenProxy):
-
-    class Meta:
-        verbose_name = 'Токен'
-        verbose_name_plural = 'Токены'
