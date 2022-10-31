@@ -1,6 +1,7 @@
 from django.contrib import admin
+from django.conf import settings
 from rest_framework.authtoken.admin import TokenAdmin
-from rest_framework.authtoken.models import TokenProxy, Token
+from rest_framework.authtoken.models import Token
 from django.contrib.admin.utils import quote
 from django.contrib.admin.views.main import ChangeList
 from django.contrib.auth import get_user_model
@@ -132,6 +133,17 @@ class SubscriptionsAdmin(admin.ModelAdmin):
     empty_value_display = '-пусто-'
 
 
+class MyTokenProxy(Token):
+    @property
+    def pk(self):
+        return self.user_id
+
+    class Meta:
+        proxy = 'rest_framework.authtoken' in settings.INSTALLED_APPS
+        abstract = 'rest_framework.authtoken' not in settings.INSTALLED_APPS
+        verbose_name = "Токен"
+
+
 class TokenChangeList(ChangeList):
     """Map to matching User id"""
     def url_for_result(self, result):
@@ -142,7 +154,7 @@ class TokenChangeList(ChangeList):
                        current_app=self.model_admin.admin_site.name)
 
 
-class TokenProxyAdmin(admin.ModelAdmin):
+class TokenAdmin(admin.ModelAdmin):
     list_display = ('key', 'user', 'created')
     fields = ('user',)
     ordering = ('-created',)
@@ -178,4 +190,4 @@ admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(Favorite, FavoriteAdmin)
 admin.site.register(ShoppingCart, ShoppingCartAdmin)
 admin.site.register(Subscription, SubscriptionsAdmin)
-admin.site.register(TokenProxy, TokenProxyAdmin)
+admin.site.register(MyTokenProxy, TokenAdmin)
