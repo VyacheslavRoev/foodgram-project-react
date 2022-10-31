@@ -19,14 +19,3 @@ class Migration(migrations.Migration):
             options={'verbose_name': 'Тэг в рецепте', 'verbose_name_plural': 'Тэги в рецепте'},
         ),
     ]
-    
-    dependencies = [
-        ('authtoken', '0003_tokenproxy'),
-    ]
-
-    operations = [
-        migrations.AlterModelOptions(
-            name='tokenproxy',
-            options={'verbose_name': 'Токен', 'verbose_name_plural': 'Токены'},
-        ),
-    ]

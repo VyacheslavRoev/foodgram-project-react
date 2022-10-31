@@ -1,4 +1,6 @@
 from django.contrib import admin
+from rest_framework.authtoken.models import Token
+from django.conf import settings
 from users.models import User
 from subscriptions.models import Subscription
 from recipes.models import (Favorite, Ingredient, IngredientAmount, Recipe,
@@ -123,6 +125,20 @@ class SubscriptionsAdmin(admin.ModelAdmin):
     search_fields = ('user', 'author',)
     empty_value_display = '-пусто-'
 
+
+class TokenProxy(Token):
+    """
+    Proxy mapping pk to user pk for use in admin.
+    """
+    @property
+    def pk(self):
+        return self.user_id
+
+    class Meta:
+        proxy = 'rest_framework.authtoken' in settings.INSTALLED_APPS
+        abstract = 'rest_framework.authtoken' not in settings.INSTALLED_APPS
+        verbose_name = "Токен"
+        verbose_name_plural = "Токены"
 
 
 admin.site.register(User, UsersAdmin)
