@@ -1,6 +1,6 @@
 from django.contrib import admin
 from rest_framework.authtoken.admin import TokenAdmin
-from rest_framework.authtoken.models import Token
+from rest_framework.authtoken.models import TokenProxy, Token
 from django.contrib.admin.utils import quote
 from django.contrib.admin.views.main import ChangeList
 from django.contrib.auth import get_user_model
@@ -146,15 +146,12 @@ class TokenAdmin(admin.ModelAdmin):
     list_display = ('key', 'user', 'created')
     fields = ('user',)
     ordering = ('-created',)
-    actions = None  # Actions not compatible with mapped IDs.
+    actions = None
 
     def get_changelist(self, request, **kwargs):
         return TokenChangeList
 
     def get_object(self, request, object_id, from_field=None):
-        """
-        Map from User ID to matching Token.
-        """
         queryset = self.get_queryset(request)
         field = User._meta.pk
         try:
@@ -165,7 +162,6 @@ class TokenAdmin(admin.ModelAdmin):
             return None
 
     def delete_model(self, request, obj):
-        # Map back to actual Token, since delete() uses pk.
         token = Token.objects.get(key=obj.key)
         return super().delete_model(request, token)
 
@@ -182,4 +178,4 @@ admin.site.register(Ingredient, IngredientAdmin)
 admin.site.register(Favorite, FavoriteAdmin)
 admin.site.register(ShoppingCart, ShoppingCartAdmin)
 admin.site.register(Subscription, SubscriptionsAdmin)
-admin.site.register(Token, TokenAdmin)
+admin.site.register(TokenProxy, TokenAdmin)
