@@ -141,7 +141,7 @@ class TokenChangeList(ChangeList):
                        current_app=self.model_admin.admin_site.name)
 
 
-class TokenAdmin(admin.ModelAdmin):
+class MyTokenAdmin(admin.ModelAdmin):
     list_display = ('key', 'user', 'created')
     fields = ('user',)
     ordering = ('-created',)
@@ -165,7 +165,7 @@ class TokenAdmin(admin.ModelAdmin):
         return super().delete_model(request, token)
 
 
-admin.site.register(MyTokenProxy, TokenAdmin)
+admin.site.register(MyTokenProxy, MyTokenAdmin)
 admin.site.register(User, UsersAdmin)
 admin.site.register(Recipe, RecipeAdmin)
 admin.site.register(Tag, TagAdmin)
